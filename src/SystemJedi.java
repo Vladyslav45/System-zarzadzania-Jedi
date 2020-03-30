@@ -314,8 +314,7 @@ public class SystemJedi extends JFrame {
                     "INNER JOIN Jedi ON Zakon.Jedi_ID = Jedi.ID_Jedi;");
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
-                zakons.add(resultSet.getString("nameZakon"));
-                zakons.add(resultSet.getString("nameJedi"));
+                zakons.add(resultSet.getString("nameZakon") + " >> " + resultSet.getString("nameJedi"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
