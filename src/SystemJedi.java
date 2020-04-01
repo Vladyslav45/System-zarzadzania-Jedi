@@ -129,18 +129,15 @@ public class SystemJedi extends JFrame {
             try {
                 BufferedReader bufferedReader = new BufferedReader(new FileReader("zakon.txt"));
                 String line;
-                PreparedStatement p = connection.prepareStatement("INSERT INTO Zakon VALUES(?,?,?)");
+                PreparedStatement p = connection.prepareStatement("INSERT INTO Zakon(Jedi_ID, Nazwa_zakonu) VALUES(?,?)");
                 while ((line = bufferedReader.readLine()) != null){
                     String[] s = line.split("@");
-                    byte[] bytes = Base64.getDecoder().decode(s[0]);
-                    byte[] byte1 = Base64.getDecoder().decode(s[1]);
-                    byte[] byte2 = Base64.getDecoder().decode(s[2]);
-                    String integer = new String(bytes);
+                    byte[] byte1 = Base64.getDecoder().decode(s[0]);
+                    byte[] byte2 = Base64.getDecoder().decode(s[1]);
                     String integer1 = new String(byte1);
                     String s1 = new String(byte2);
-                    p.setInt(1, Integer.parseInt(integer));
-                    p.setInt(2, Integer.parseInt(integer1));
-                    p.setString(3, s1);
+                    p.setInt(1, Integer.parseInt(integer1));
+                    p.setString(2, s1);
                     p.executeUpdate();
                 }
             } catch (IOException | SQLException e1) {
@@ -153,13 +150,12 @@ public class SystemJedi extends JFrame {
         exportButtonZakon.addActionListener(e -> {
             try {
                 FileWriter fileWriter = new FileWriter("zakon.txt", true);
-                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Zakon");
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT Jedi_ID, Nazwa_zakonu  FROM Zakon");
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()){
-                    int id = resultSet.getInt("ID_Zakon");
                     int idJedi = resultSet.getInt("Jedi_ID");
                     String zakon = resultSet.getString("Nazwa_zakonu");
-                    fileWriter.write(Base64.getEncoder().encodeToString(String.valueOf(id).getBytes()) + "@" + Base64.getEncoder().encodeToString(String.valueOf(idJedi).getBytes()) + "@" + Base64.getEncoder().encodeToString(zakon.getBytes()) + "\n");
+                    fileWriter.write(Base64.getEncoder().encodeToString(String.valueOf(idJedi).getBytes()) + "@" + Base64.getEncoder().encodeToString(zakon.getBytes()) + "\n");
                 }
                 fileWriter.close();
             } catch (SQLException | IOException e1) {
@@ -211,24 +207,21 @@ public class SystemJedi extends JFrame {
             try {
                 BufferedReader bufferedReader = new BufferedReader(new FileReader("jedi.txt"));
                 String line;
-                PreparedStatement p = connection.prepareStatement("INSERT INTO Jedi VALUES(?,?,?,?,?)");
+                PreparedStatement p = connection.prepareStatement("INSERT INTO Jedi(name_jedi, Color_sword, Moc, Strona_mocy) VALUES(?,?,?,?)");
                 while ((line = bufferedReader.readLine()) != null){
                     String[] s = line.split("@");
-                    byte[] bytes = Base64.getDecoder().decode(s[0]);
-                    byte[] byte1 = Base64.getDecoder().decode(s[1]);
-                    byte[] byte2 = Base64.getDecoder().decode(s[2]);
-                    byte[] byte3 = Base64.getDecoder().decode(s[3]);
-                    byte[] byte4 = Base64.getDecoder().decode(s[4]);
-                    String sw = new String(bytes);
+                    byte[] byte1 = Base64.getDecoder().decode(s[0]);
+                    byte[] byte2 = Base64.getDecoder().decode(s[1]);
+                    byte[] byte3 = Base64.getDecoder().decode(s[2]);
+                    byte[] byte4 = Base64.getDecoder().decode(s[3]);
                     String s1 = new String(byte1);
                     String s2 = new String(byte2);
                     String s3 = new String(byte3);
                     String s4 = new String(byte4);
-                    p.setInt(1, Integer.parseInt(sw));
-                    p.setString(2, s1);
-                    p.setString(3, s2);
-                    p.setInt(4,Integer.parseInt(s3));
-                    p.setString(5, s4);
+                    p.setString(1, s1);
+                    p.setString(2, s2);
+                    p.setInt(3,Integer.parseInt(s3));
+                    p.setString(4, s4);
                     p.executeUpdate();
                 }
             } catch (IOException | SQLException e1) {
@@ -240,15 +233,14 @@ public class SystemJedi extends JFrame {
         exportButtonJedi.addActionListener(e -> {
             try {
                 FileWriter fileWriter = new FileWriter("jedi.txt", true);
-                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Jedi");
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT name_jedi, Color_sword,Moc,Strona_mocy FROM Jedi");
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()){
-                    int id = resultSet.getInt("ID_Jedi");
                     String name = resultSet.getString("name_jedi");
                     String sword = resultSet.getString("Color_sword");
                     int moc = resultSet.getInt("Moc");
                     String stronaMocy = resultSet.getString("Strona_mocy");
-                    fileWriter.write(Base64.getEncoder().encodeToString(String.valueOf(id).getBytes()) + "@" + Base64.getEncoder().encodeToString(name.getBytes()) + "@"+Base64.getEncoder().encodeToString(sword.getBytes()) + "@"+Base64.getEncoder().encodeToString(String.valueOf(moc).getBytes()) + "@" + Base64.getEncoder().encodeToString(stronaMocy.getBytes()) + "\n");
+                    fileWriter.write(Base64.getEncoder().encodeToString(name.getBytes()) + "@"+Base64.getEncoder().encodeToString(sword.getBytes()) + "@"+Base64.getEncoder().encodeToString(String.valueOf(moc).getBytes()) + "@" + Base64.getEncoder().encodeToString(stronaMocy.getBytes()) + "\n");
                 }
                 fileWriter.close();
             } catch (SQLException | IOException e1) {
